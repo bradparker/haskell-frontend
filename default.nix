@@ -9,7 +9,7 @@ let
   }) + "/miso-ghcjs.nix") {};
   miso-style = haskellPackages.callPackage ((fetchgit {
     inherit (builtins.fromJSON (builtins.readFile ./nix-revisions/miso-style.json)) url rev sha256;
-  }) + "/miso-style.nix") {
+  }) + "/package.nix") {
     miso = miso;
   };
   ghcjs-dev-client = haskellPackages.callPackage ((fetchgit {
