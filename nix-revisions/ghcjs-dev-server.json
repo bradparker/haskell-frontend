@@ -1,7 +1,7 @@
 {
   "url": "https://github.com/bradparker/ghcjs-dev-server.git",
-  "rev": "cf3c05210a6d52f2d6ff2c7724884fb225e25090",
-  "date": "2018-02-25T18:55:49+10:00",
-  "sha256": "0xzw9ppricr17w4nxfcjx9ykv1xs7d8gwwsdipghgz3cx01drhs9",
+  "rev": "f36fe6f8c8d792a53b40b1be3fda618b1907e19a",
+  "date": "2018-03-03T15:16:30+10:00",
+  "sha256": "1a9n46rygwwbfzyy42d654pl9bl0s6122a3cm070a12nsg6a3s52",
   "fetchSubmodules": true
 }
