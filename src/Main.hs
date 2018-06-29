@@ -250,7 +250,7 @@ updateView = styledView app
 
 main :: IO ()
 main = do
-  runGHCJSDevServerClient
+  runGHCJSDevServerClient 8081
   startApp
     App
     { initialAction = NoOp
