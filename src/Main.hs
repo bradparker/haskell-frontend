@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Main
   ( main
   ) where
@@ -56,7 +54,7 @@ container =
   styles $ do
     property "max-width" "24rem"
     margin "0 auto"
-    padding "2rem"
+    padding "3rem"
 
 header ::
      ([Attribute Message] -> [View Message] -> View Message)
@@ -67,13 +65,16 @@ header ::
 header element extraStyles =
   styled element $
   styles $ do
-    lineHeight "1.125em"
     fontWeight "700"
     extraStyles
 
 heading :: StyledView Message
 heading =
-  header h1_ (margin "0 0 2rem") [] [text "These are the things you must do"]
+  header
+    h1_
+    (margin "0 0 3rem" >> fontSize "1.5rem" >> lineHeight "1.5rem")
+    []
+    [text "These are the things you must do"]
 
 globalStyles :: StyleBuilder Styles
 globalStyles = do
@@ -85,7 +86,7 @@ globalStyles = do
 pillStyles :: StyleBuilder Styles
 pillStyles = do
   borderRadius "0.25rem"
-  padding "0.75em 1em"
+  padding "1rem 1.25rem"
   lineHeight "1rem"
 
 textInput :: MisoString -> (MisoString -> Message) -> StyledView Message
