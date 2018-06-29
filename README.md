@@ -14,7 +14,7 @@ Putting together some tools and libraries into an example.
 
 ```
 $ nix-shell
-$ ghcjs-dev-server
+$ ghcjs-dev-server -s src -x OverloadedStrings
 ```
 
 The example will be available at http://localhost:8080.
