@@ -1,24 +1,46 @@
-name:                haskell-frontend
-version:             0.1.0.0
-license:             BSD3
-license-file:        LICENSE
-author:              Brad Parker
-maintainer:          hi@bradparker.com
-build-type:          Simple
-extra-source-files:  ChangeLog.md
-cabal-version:       >=1.10
+cabal-version: 2.2
+name: haskell-frontend
+version: 0.1.0.0
+license: BSD-3-Clause
+license-file: LICENSE
+author: Brad Parker
+maintainer: hi@bradparker.com
+build-type: Simple
+
+common ghc
+  default-language:
+    Haskell2010
+
+common deps
+  build-depends:
+    base >=4.11 && <4.12,
+    miso
+
+library
+  import: ghc
+  import: deps
+  hs-source-dirs:
+    src
+  exposed-modules:
+    HaskellFrontend
 
 executable haskell-frontend
+  import: ghc
+  import: deps
   main-is:
     Main.hs
   build-depends:
-    base >=4.8 && <4.9,
-    miso,
-    miso-style,
-    ghcjs-dev-client
+    haskell-frontend
   hs-source-dirs:
-    src
-  default-language:
-    Haskell2010
-  default-extensions:
-    OverloadedStrings
+    exe
+
+executable haskell-frontend-dev
+  import: ghc
+  import: deps
+  main-is:
+    Main.hs
+  build-depends:
+    ghcjs-dev-client,
+    haskell-frontend
+  hs-source-dirs:
+    dev
