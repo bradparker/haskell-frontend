@@ -1,10 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module HaskellFrontend
+module Main
   ( main
   ) where
 
+import Language.Javascript.JSaddle.Warp as JSaddle
 import qualified Miso
 import Miso
   ( App(App)
@@ -29,7 +30,7 @@ data Action
   deriving (Show, Eq)
 
 main :: IO ()
-main =
+main = JSaddle.run 8080 $
   startApp App
     { Miso.initialAction = NoOp
     , Miso.model         = 0

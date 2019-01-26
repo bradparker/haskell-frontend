@@ -7,40 +7,14 @@ author: Brad Parker
 maintainer: hi@bradparker.com
 build-type: Simple
 
-common ghc
-  default-language:
-    Haskell2010
-
-common deps
+executable haskell-frontend
+  main-is:
+    Main.hs
   build-depends:
     base >=4.11 && <4.12,
+    jsaddle-warp,
     miso
-
-library
-  import: ghc
-  import: deps
   hs-source-dirs:
     src
-  exposed-modules:
-    HaskellFrontend
-
-executable haskell-frontend
-  import: ghc
-  import: deps
-  main-is:
-    Main.hs
-  build-depends:
-    haskell-frontend
-  hs-source-dirs:
-    exe
-
-executable haskell-frontend-dev
-  import: ghc
-  import: deps
-  main-is:
-    Main.hs
-  build-depends:
-    ghcjs-dev-client,
-    haskell-frontend
-  hs-source-dirs:
-    dev
+  default-language:
+    Haskell2010

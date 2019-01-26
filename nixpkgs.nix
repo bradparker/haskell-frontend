@@ -1,39 +1,60 @@
 let
   overlay = self: super:
-    let
-      ghcjs-dev-server-source = super.fetchFromGitHub {
-        owner = "bradparker";
-        repo = "ghcjs-dev-server";
-        rev = "6a2d3e90f4d58e3eb60e9732031903de2a7f6aca";
-        sha256 = "1h2nszsg5iyb31iha1zh8mbswhncdb4bhnma2p2m6hjxyva5sarg";
-      };
-    in
-      {
-        haskellPackages = super.haskellPackages.extend (hself: hsuper: {
-          ghcjs-dev-server = hself.callPackage "${ghcjs-dev-server-source}/server/package.nix" {};
-        });
+    {
+      haskellPackages = super.haskellPackages.extend (hself: hsuper: {
+        # Newer miso please
+        miso = super.haskell.lib.addBuildDepends
+          (super.haskell.lib.enableCabalFlag (hself.callHackage "miso" "0.21.2.0" {}) "jsaddle")
+          [
+            hself.file-embed
+            hself.jsaddle
+            hself.jsaddle-warp
+            hself.wai
+            hself.wai-app-static
+            hself.warp
+            hself.websockets
+          ];
 
-        haskell = super.haskell // {
-          packages = super.haskell.packages // {
-            ghcjs = super.haskell.packages.ghcjs.extend (hself: hsuper: {
-              # Doctest fails to build with a strange error.
-              doctest = null;
+        jsaddle = super.haskell.lib.doJailbreak hsuper.jsaddle;
 
-              # These require doctest to run their tests.
-              aeson = super.haskell.lib.dontCheck hsuper.aeson;
-              http-types = super.haskell.lib.dontCheck hsuper.http-types;
-              servant = super.haskell.lib.dontCheck hsuper.servant;
+        jsaddle-warp =
+          let
+            jsaddle-source = super.fetchFromGitHub {
+              owner = "ghcjs";
+              repo = "jsaddle";
+              rev = "76d969d62c0c125bf58927224cac0448b429cd38";
+              sha256 = "1fcw40w1x07daxwh4sbnf542v03p4858v8wbinsjw6vdabnm7aad";
+            };
+            package = hself.callPackage ("${jsaddle-source}/jsaddle-warp") {};
+          in
+            super.haskell.lib.dontCheck (package.overrideAttrs (oldAttrs: {
+              patchPhase = ''
+                substituteInPlace jsaddle-warp.cabal --replace "aeson >=0.8.0.2 && <1.3" "aeson >=0.8.0.2 && <1.4";
+              '';
+            }));
+      });
 
-              # These have test suites which hang indefinitely.
-              scientific = super.haskell.lib.dontCheck hsuper.scientific;
-              tasty-quickcheck = super.haskell.lib.dontCheck hsuper.tasty-quickcheck;
+      haskell = super.haskell // {
+        packages = super.haskell.packages // {
+          ghcjs = super.haskell.packages.ghcjs.extend (hself: hsuper: {
+            # Doctest fails to build with a strange error.
+            doctest = null;
 
-              # Custom packages, not in hackage.
-              ghcjs-dev-client = hself.callPackage "${ghcjs-dev-server-source}/client/package.nix" {};
-            });
-          };
+            # These require doctest to run their tests.
+            aeson = super.haskell.lib.dontCheck hsuper.aeson;
+            http-types = super.haskell.lib.dontCheck hsuper.http-types;
+            servant = super.haskell.lib.dontCheck hsuper.servant;
+
+            # These have test suites which hang indefinitely.
+            scientific = super.haskell.lib.dontCheck hsuper.scientific;
+            tasty-quickcheck = super.haskell.lib.dontCheck hsuper.tasty-quickcheck;
+
+            # Newer miso please
+            miso = super.haskell.lib.enableCabalFlag (hself.callHackage "miso" "0.21.2.0" {}) "jsaddle";
+          });
         };
       };
+    };
 
   nixpkgs-source = builtins.fetchTarball {
     url = "https://releases.nixos.org/nixos/18.09/nixos-18.09.1922.97e0d53d669/nixexprs.tar.xz";
