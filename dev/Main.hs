@@ -9,5 +9,5 @@ import qualified HaskellFrontend
 
 main :: IO ()
 main = do
-  runGHCJSDevServerClient 8081
+  runGHCJSDevServerClient 8080
   HaskellFrontend.main

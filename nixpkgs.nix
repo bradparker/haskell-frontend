@@ -4,13 +4,13 @@ let
       ghcjs-dev-server-source = super.fetchFromGitHub {
         owner = "bradparker";
         repo = "ghcjs-dev-server";
-        rev = "6a2d3e90f4d58e3eb60e9732031903de2a7f6aca";
-        sha256 = "1h2nszsg5iyb31iha1zh8mbswhncdb4bhnma2p2m6hjxyva5sarg";
+        rev = "a4a9286691f310c61d05aba72a54fbb06e2ac71c";
+        sha256 = "1y318yf1nw2qn4dxgw4wivk4w83mmnm7ghw4whi25nky97m3zr6h";
       };
     in
       {
         haskellPackages = super.haskellPackages.extend (hself: hsuper: {
-          ghcjs-dev-server = hself.callPackage "${ghcjs-dev-server-source}/server/package.nix" {};
+          ghcjs-dev-server = hself.callCabal2nix "ghcjs-dev-server" "${ghcjs-dev-server-source}/server" {};
         });
 
         haskell = super.haskell // {
@@ -29,7 +29,7 @@ let
               tasty-quickcheck = super.haskell.lib.dontCheck hsuper.tasty-quickcheck;
 
               # Custom packages, not in hackage.
-              ghcjs-dev-client = hself.callPackage "${ghcjs-dev-server-source}/client/package.nix" {};
+              ghcjs-dev-client = hself.callCabal2nix "ghcjs-dev-client" "${ghcjs-dev-server-source}/client" {};
             });
           };
         };
